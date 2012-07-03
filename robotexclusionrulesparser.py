@@ -413,7 +413,7 @@ class RobotExclusionRulesParser(object):
         return None
 
 
-    def fetch(self, url):
+    def fetch(self, url, timeout=None):
         """Attempts to fetch the URL requested which should refer to a 
         robots.txt file, e.g. http://example.com/robots.txt.
         """
@@ -435,7 +435,10 @@ class RobotExclusionRulesParser(object):
             req = urllib_request.Request(url)
 
         try:
-            f = urllib_request.urlopen(req)
+            if timeout:
+                f = urllib_request.urlopen(req, timeout=timeout)
+            else:
+                f = urllib_request.urlopen(req)
             content = f.read(MAX_FILESIZE)
             # As of Python 2.5, f.info() looks like it returns the HTTPMessage
             # object created during the connection. 
